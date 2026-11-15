@@ -113,9 +113,9 @@ a:hover { opacity: 0.7; }
 
 /* ---------- Layout ---------- */
 .page {
-  max-width: 860px;
+  max-width: 48rem;                    /* in rem so the column grows with the visitor's text size */
   margin: 0 auto;
-  padding: 4.5rem 6% 3rem;
+  padding: 4.5rem min(6%, 3rem) 3rem;  /* side padding is capped so wide screens do not squeeze the column */
   display: flex;
   flex-direction: column;
   gap: 3.5rem;
