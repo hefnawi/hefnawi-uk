@@ -160,7 +160,7 @@ a:hover { opacity: 0.7; }
 }
 .orbit-sat {
   fill: var(--label);
-  offset-path: path("M -50 0 a 50 18 0 1 1 100 0 a 50 18 0 1 1 -100 0");   /* the two "1 1" flags set the direction; "1 0" reverses it */
+  offset-path: path("M -50 0 a 50 18 0 1 0 100 0 a 50 18 0 1 0 -100 0");   /* the two sweep flags set the direction: "1 1" is counter-clockwise on screen, "1 0" is clockwise */
   animation: orbit 12s linear infinite;
 }
 .orbit-tail { opacity: 0.45; }   /* fading trail behind the sparkle */
