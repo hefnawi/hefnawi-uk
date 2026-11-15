@@ -1,0 +1,313 @@
+/* hefnawi.co.uk · Cyber Swiss
+   One page, no JavaScript, no external requests.
+   To restyle, change the variables below. */
+
+/* ---------- Theme: Cyber Swiss (the main and only look) ---------- */
+:root {
+  color-scheme: dark;
+  --bg: #0a0a0f;
+  --ink: #f2f2f5;
+  --muted: #a0a3b1;
+  --accent: #ff2e88;   /* magenta bar and focus ring */
+  --label: #3de1f5;    /* cyan section labels and orbit dot */
+
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --font-head: "Space Grotesk", var(--font-sans);
+  --head-tracking: -0.03em;
+  --head-weight: 700;
+}
+
+/* ---------- Optional: Swiss light for visitors whose device is set to light ----------
+   Remove the comment markers around this block to switch it on,
+   and change the color-scheme meta tag in index.html to "dark light".
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --bg: #ffffff;
+    --ink: #111111;
+    --muted: #555555;
+    --accent: #1f3fbf;
+    --label: #111111;
+  }
+}
+*/
+
+/* ---------- Self-hosted fonts ----------
+   Files live in the fonts/ folder next to this stylesheet.
+   If a file is missing, the page falls back to system fonts. */
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/ibm-plex-sans-v23-latin-regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/ibm-plex-sans-v23-latin-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/ibm-plex-mono-v23-latin-regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/ibm-plex-mono-v23-latin-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/space-grotesk-v22-latin-500.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/space-grotesk-v22-latin-700.woff2") format("woff2");
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { font-size: 112.5%; } /* 18px at default settings; still scales with the visitor's browser text size */
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+a { color: inherit; text-underline-offset: 0.2em; }
+a:hover { opacity: 0.7; }
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.skip {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  padding: 0.75rem 1rem;
+  background: var(--ink);
+  color: var(--bg);
+}
+.skip:focus { left: 0; }
+
+/* ---------- Layout ---------- */
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 4.5rem 6% 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+/* ---------- Intro ---------- */
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Orbit track: a small dot circling the dot of the final "i" in the name.
+   The ring is positioned from the text baseline using the font's own
+   x-height (the ex unit), so it stays centred whichever font loads. */
+.i-orbit {
+  display: inline-grid;
+  align-items: baseline;
+}
+.i-orbit > * { grid-area: 1 / 1; }
+.orbit-anchor {
+  position: relative;   /* zero-height box whose bottom edge sits on the text baseline */
+  height: 0;
+}
+.orbit {
+  --orbit-rise: calc(1ex + 0.14em);   /* baseline up to the centre of the dot on the i; nudge the 0.14em if needed */
+  position: absolute;
+  left: 50%;
+  bottom: var(--orbit-rise);
+  width: 1.2em;
+  height: 0.6em;
+  transform: translate(-50%, 50%);
+  overflow: visible;
+  pointer-events: none;
+}
+.orbit-path {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  vector-effect: non-scaling-stroke;
+}
+.orbit-sat {
+  fill: var(--label);
+  offset-path: path("M -50 0 a 50 18 0 1 1 100 0 a 50 18 0 1 1 -100 0");   /* the two "1 1" flags set the direction; "1 0" reverses it */
+  animation: orbit 12s linear infinite;
+}
+.orbit-tail { opacity: 0.45; }   /* fading trail behind the sparkle */
+/* Variable speed: the keyframes below make the sparkle move as a real circular orbit
+   would look when seen at a tilt. It sweeps quickly past the planet on the long sides
+   and slows at the two far ends. Generated values; lap time is set by the 12s above. */
+@keyframes orbit {
+  0.00% { offset-distance: 0.00%; }
+  4.17% { offset-distance: 2.23%; }
+  8.33% { offset-distance: 5.20%; }
+  12.50% { offset-distance: 9.08%; }
+  16.67% { offset-distance: 13.83%; }
+  20.83% { offset-distance: 19.28%; }
+  25.00% { offset-distance: 25.00%; }
+  29.17% { offset-distance: 30.72%; }
+  33.33% { offset-distance: 36.17%; }
+  37.50% { offset-distance: 40.92%; }
+  41.67% { offset-distance: 44.80%; }
+  45.83% { offset-distance: 47.77%; }
+  50.00% { offset-distance: 50.00%; }
+  54.17% { offset-distance: 52.23%; }
+  58.33% { offset-distance: 55.20%; }
+  62.50% { offset-distance: 59.08%; }
+  66.67% { offset-distance: 63.83%; }
+  70.83% { offset-distance: 69.28%; }
+  75.00% { offset-distance: 75.00%; }
+  79.17% { offset-distance: 80.72%; }
+  83.33% { offset-distance: 86.17%; }
+  87.50% { offset-distance: 90.92%; }
+  91.67% { offset-distance: 94.80%; }
+  95.83% { offset-distance: 97.77%; }
+  100.00% { offset-distance: 100.00%; }
+}
+}
+@media (prefers-reduced-motion: reduce) {
+  .orbit-sat { animation: none; }     /* still image for visitors who ask for less motion */
+}
+
+.bar {
+  width: 56px;
+  height: 6px;
+  background: var(--accent);
+}
+
+h1 {
+  margin: 0;
+  font-family: var(--font-head);
+  font-size: clamp(2.75rem, 8vw, 5rem);
+  font-weight: var(--head-weight);
+  line-height: 1;
+  letter-spacing: var(--head-tracking);
+}
+
+.lead {
+  margin: 0;
+  max-width: 46ch;      /* wide enough for the tagline on one line */
+  text-wrap: balance;   /* on narrow screens, break into even lines */
+  font-family: var(--font-head);
+  font-size: clamp(1.125rem, 2.4vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.where {
+  display: block;       /* location always sits on its own line */
+  color: var(--muted);
+}
+
+.summary {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--muted);
+}
+
+/* ---------- Rows: label on the left, content on the right ---------- */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--ink);
+}
+.row:last-child { border-bottom: 1px solid var(--ink); }
+
+.row > h2 {
+  flex: 0 0 11rem;      /* wide enough for the longest label, "Flight Heritage" */
+  margin: 0;
+  padding-top: 0.25rem;
+  color: var(--label);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.row > :not(h2) {
+  flex: 1 1 320px;
+  margin: 0;
+}
+
+/* Expertise */
+dl { display: flex; flex-direction: column; }
+dt {
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+dd {
+  margin: 0 0 0.875rem;
+  color: var(--muted);
+}
+dd:last-child { margin-bottom: 0; }
+
+/* Flight Heritage */
+ul {
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+/* Contact */
+#contact { padding-top: 0.875rem; } /* lines the label up with the padded links */
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.75rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+.links a {
+  display: inline-block;
+  padding: 0.625rem 0; /* comfortable tap target */
+}
+
+/* ---------- Footer ---------- */
+footer {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------- Print ---------- */
+@media print {
+  :root { --bg: #fff; --ink: #000; --muted: #333; --accent: #000; --label: #000; }
+  .skip, .orbit { display: none; }
+}
