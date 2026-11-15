@@ -131,6 +131,7 @@ a:hover { opacity: 0.7; }
 /* Orbit track: a small dot circling the dot of the final "i" in the name.
    The ring is positioned from the text baseline using the font's own
    x-height (the ex unit), so it stays centred whichever font loads. */
+.surname { white-space: nowrap; }   /* keeps "Hefnawi" in one piece, so the i never drops to its own line */
 .i-orbit {
   display: inline-grid;
   align-items: baseline;
