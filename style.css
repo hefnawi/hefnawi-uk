@@ -209,7 +209,7 @@ a:hover { opacity: 0.7; }
 h1 {
   margin: 0;
   font-family: var(--font-head);
-  font-size: clamp(2.75rem, 8vw, 5rem);
+  font-size: clamp(2rem, 11vw, 5rem);   /* scales with the screen so the name fits one line on phones; wraps only below about 300px */
   font-weight: var(--head-weight);
   line-height: 1;
   letter-spacing: var(--head-tracking);
